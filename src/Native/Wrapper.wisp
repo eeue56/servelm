@@ -7,9 +7,10 @@
 (defn- createServer
       [http Tuple2 Task]
   (fn [address] (let
-    [send (._0 address)
+    [send (:_0 address)
      server (.createServer http (fn [request response]
-      (send (Tuple2 request response))))]
+      (do (send (Tuple2 request response))
+          (.log console "create"))))]
 
     (.asyncFunction Task
       (fn [callback] (callback (.succeed Task server)))))))
@@ -27,13 +28,13 @@
    Tuple2 (:Tuple2 (Elm.Native.Utils.make  localRuntime))
    Task            (Elm.Native.Task.make   localRuntime)
    createServer*   (createServer http Tuple2 Task)
-   listen*         (listen Task)
-   v localRuntime.Native.Http.values]
+   listen*         (F3 (listen Task))]
 
-  (do (sanitize localRuntime :Native :Http) (if v v
-    (set! localRuntime.Native.Http.values {
-      :createServer createServer*
-      :listen listen*})))))
+  (do (sanitize localRuntime :Native :Http)
+    (let [v localRuntime.Native.Http.values]
+      (if v v (set! localRuntime.Native.Http.values {
+        :createServer createServer*
+        :listen listen*}))))))
 
 (sanitize Elm :Native :Http)
 (set! Elm.Native.Http.make make)
