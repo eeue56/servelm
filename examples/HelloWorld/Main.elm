@@ -1,6 +1,5 @@
 module Main where
 
--- import Graphics.Element exposing (..)
 import Http.Server exposing (..)
 import Task exposing (..)
 import Signal exposing (..)

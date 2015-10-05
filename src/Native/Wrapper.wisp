@@ -20,7 +20,7 @@
   (fn [port echo server]
     (.asyncFunction Task (fn [callback]
       (.listen server port (fn []
-        (do (.log console echo) (callback server))))))))
+        (do (.log console echo) (callback (.succeed Task server)))))))))
 
 (defn- make [localRuntime] (let
   [http (require "http")
