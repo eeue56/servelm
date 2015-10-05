@@ -4,26 +4,36 @@
     (aget r space)))
   record))
 
-(defn- handler [sendMessage address Tuple2]
-  (fn [request response]
-    (sendMessage address (Tuple2 request response))))
-
 (defn- createServer
-      [http localRuntime sendMessage Tuple2]
-  (fn [address port message]
-      (.listen (.createServer http (handler address))
-               port
-               (fn [] (.log console message)))))
+      [http Tuple2 Task]
+  (fn [address] (let
+    [send (._0 address)
+     server (.createServer http (fn [request response]
+      (send (Tuple2 request response))))]
+
+    (.asyncFunction Task
+      (fn [callback] (callback (.succeed Task server)))))))
+
+(defn- listen
+  [Task]
+  (fn [port echo server]
+    (.asyncFunction Task (fn [callback]
+      (.listen server port (fn []
+        (do (.log console echo) (callback server))))))))
 
 (defn- make [localRuntime] (let
   [http (require "http")
-   Signal (Elm.Native.Signal.make localRuntime)
-   Tuple2 (:Tuple2 (Elm.Native.Utils.make localRuntime))]
-  (do (sanitize localRuntime :Native :Http)
-      (if localRuntime.Native.Http.values
-          localRuntime.Native.Http.values
-          (set! localRuntime.Native.Http.values {
-            :createServer createServer})))))
+   Signal          (Elm.Native.Signal.make localRuntime)
+   Tuple2 (:Tuple2 (Elm.Native.Utils.make  localRuntime))
+   Task            (Elm.Native.Task.make   localRuntime)
+   createServer*   (createServer http Tuple2 Task)
+   listen*         (listen Task)
+   v localRuntime.Native.Http.values]
+
+  (do (sanitize localRuntime :Native :Http) (if v v
+    (set! localRuntime.Native.Http.values {
+      :createServer createServer*
+      :listen listen*})))))
 
 (sanitize Elm :Native :Http)
 (set! Elm.Native.Http.make make)

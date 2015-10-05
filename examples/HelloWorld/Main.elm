@@ -4,10 +4,20 @@ import Graphics.Element exposing (..)
 import Http exposing (..)
 
 server : Mailbox (Request, Response)
-server = mailbox (_, _)
+server = mailbox (Request, Response)
 
-port listen : Task x Server
-port listen = createServer server.address 8080 "listening on 8080"
+port serve : Task x Server
+port serve =
+  createServer server.address
+  `andThen` listen 8080 "listening on 8080"
 
+
+
+
+
+
+-------------------------
+--- Grr...            ---
+-------------------------
 main : Element
 main = show "placeholder"

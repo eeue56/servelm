@@ -8,5 +8,11 @@ type Server = Server
 type Request = Request
 type Response = Response
 
-createServer : Address (Request, Response) -> Int -> String -> Task x Server
+type alias Port = Int
+type alias Echo = String
+
+createServer : Address (Request, Response) -> Task x Server
 createServer = Native.Http.createServer
+
+listen : Port -> Echo -> Server -> Task x Server
+listen = Native.Http.listen
