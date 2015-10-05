@@ -11,24 +11,3 @@ port serve : Task x Server
 port serve =
   createServer server.address
   `andThen` listen 8080 "listening on 8080"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- -------------------------
--- --- Grr...            ---
--- -------------------------
--- main : Element
--- main = show "placeholder"
