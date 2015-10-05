@@ -11,7 +11,8 @@
     [send (:_0 address)
      server (.createServer http (fn [request response]
       (do (send (Tuple2 request response))
-          (.log console "create"))))]
+          (.log console response)
+          (.log console "->recieved->"))))]
 
     (.asyncFunction Task
       (fn [callback] (callback (.succeed Task server)))))))
@@ -29,7 +30,6 @@
     (let [o {}]
       (.asyncFunction Task (fn [callback]
         (do (set! (aget o header._0) header._1)
-            (.log console header res)
             (.writeHead res code o)
             (callback (.succeed Task res))))))))
 
@@ -41,18 +41,20 @@
           (callback (.succeed Task res)))))))
 
 (defn- end
-  [Task]
+  [Task Tuple0]
   (fn [res]
   (.asyncFunction Task (fn [callback]
     (do (.end res)
-        (callback (.succeed Task Util.Tuple0)))))))
+        (callback (.succeed Task Tuple0)))))))
 
 (defn- make
   [localRuntime] (let
   [http (require "http")
    Signal          (Elm.Native.Signal.make localRuntime)
-   Tuple2 (:Tuple2 (Elm.Native.Utils.make  localRuntime))
    Task            (Elm.Native.Task.make   localRuntime)
+   Utils           (Elm.Native.Utils.make  localRuntime)
+   Tuple0          (:Tuple0 Utils)
+   Tuple2          (:Tuple2 Utils)
    noop            (fn [] nil)]
 
   (do (sanitize localRuntime :Native :Http)
@@ -62,12 +64,12 @@
         :listen       (F3 (listen Task))
         :writeHead    (F3 (writeHead Task))
         :write        (F2 (write Task))
-        :end          (end Task)
+        :end          (end Task Tuple0)
         :emptyReq     {}
         :emptyRes     {
-          :end       noop
-          :write     noop
-          :writeHead noop}}))))))
+          :end          noop
+          :write        noop
+          :writeHead    noop}}))))))
 
 (sanitize Elm :Native :Http)
 (set! Elm.Native.Http.make make)
