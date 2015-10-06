@@ -1,3 +1,10 @@
+(defn- sanitize
+  [record & spaces]
+  (spaces.reduce (fn [r space] (do
+    (if (aget r space) nil (set! (aget r space) {}))
+    (aget r space)))
+  record))
+
 (defn- createServer
       [http Tuple2 Task]
   (fn [address] (let
@@ -7,13 +14,6 @@
 
     (.asyncFunction Task
       (fn [callback] (callback (.succeed Task server)))))))
-
-(defn- sanitize
-  [record & spaces]
-  (spaces.reduce (fn [r space] (do
-    (if (aget r space) nil (set! (aget r space) {}))
-    (aget r space)))
-  record))
 
 (defn- listen
   [Task]
