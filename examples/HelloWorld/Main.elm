@@ -10,7 +10,7 @@ server = mailbox (emptyReq, emptyRes)
 route : (Request, Response) -> Task x ()
 route (_, res) =
   writeHead 200 ("Content-Type", "text/html") res
-  `andThen` write "<h1>Wowzers!</h1>"
+  `andThen` write "<h1>Wowzers!!</h1>"
   `andThen` end
 
 port reply : Signal (Task x ())
