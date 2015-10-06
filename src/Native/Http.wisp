@@ -41,15 +41,24 @@
 (defn- end
   [Task Tuple0]
   (fn [res]
-  (.asyncFunction Task (fn [callback]
-    (do (.end res)
-        (callback (.succeed Task Tuple0)))))))
+    (.asyncFunction Task (fn [callback]
+      (do (.end res)
+          (callback (.succeed Task Tuple0)))))))
+
+(defn on
+  [Signal]
+  (fn [eventName x]
+    (.on x eventName (fn [request, response]
+      (if (== (typeof request) "undefined")
+        (.input Signal eventName Tuple0)
+        (.input Signal eventName (Tuple request response)))))))
 
 (defn- make
   [localRuntime] (let
   [http (require "http")
-   Task   (Elm.Native.Task.make  localRuntime)
-   Utils  (Elm.Native.Utils.make localRuntime)
+   Task   (Elm.Native.Task.make   localRuntime)
+   Utils  (Elm.Native.Utils.make  localRuntime)
+   Signal (Elm.Native.Signal.make localRuntime)
    Tuple0 (:Tuple0 Utils)
    Tuple2 (:Tuple2 Utils)
    noop   (fn [] nil)]
@@ -62,6 +71,7 @@
         :listen       (F3 (listen    Task))
         :writeHead    (F3 (writeHead Task))
         :write        (F2 (write     Task))
+        :on           (F2 (on        Signal Tuple0))
         :end          (end Task Tuple0)
         :url          (fn [res] (:url        res))
         :method       (fn [res] (:method     res))

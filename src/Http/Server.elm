@@ -1,19 +1,26 @@
 module Http.Server
   ( createServer, listen
-  , writeHead, write
-  , end
+  , writeHead, write, end
+  , writeHtml, writeJson
   , Port, Code, Echo, Header
   , Server, Method(..)
   , emptyReq, Request
   , emptyRes, Response
-  , writeHtml, writeJson
-  , url, method, statusCode) where
+  , url, method, statusCode
+  , on, onRequest
+  , onClose, onCloseReq
+  , onCloseRes, onFinishRes) where
 
 import Task exposing (Task, succeed, andThen)
 import Signal exposing (Address, Mailbox, mailbox)
 import Json.Encode as Json
 import Native.Http
-import Debug
+
+type alias Port   = Int
+type alias Code   = Int
+type alias Echo   = String
+type alias Url    = String
+type alias Header = (String, String)
 
 type Server       = Server
 type Request      = Request
@@ -26,11 +33,23 @@ type Method
   | DELETE
   | NOOP
 
-type alias Port   = Int
-type alias Code   = Int
-type alias Echo   = String
-type alias Url    = String
-type alias Header = (String, String)
+on : eventName -> target -> Signal input
+on = Native.Http.on
+
+onRequest : Server -> Signal (Request, Response)
+onRequest = on "request"
+
+onClose : Server -> Signal ()
+onClose = on "close"
+
+onCloseReq : Request -> Signal ()
+onCloseReq = on "close"
+
+onCloseRes : Response -> Signal ()
+onCloseRes = on "close"
+
+onFinishRes : Response -> Signal ()
+onFinishRes = on "finish"
 
 createServer : Address (Request, Response) -> Task x Server
 createServer = Native.Http.createServer
