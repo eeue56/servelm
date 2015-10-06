@@ -6,10 +6,11 @@ module Http.Server
   , Server, Method(..)
   , emptyReq, Request
   , emptyRes, Response
-  , writeHtml, url) where
+  , writeHtml, writeJson, url) where
 
 import Task exposing (Task, succeed, andThen)
 import Signal exposing (Address, Mailbox, mailbox)
+import Json.Encode as Json
 import Native.Http
 
 type Server       = Server
@@ -77,5 +78,5 @@ writeHtml = writeAs textHtml
 applicationJson : Header
 applicationJson = ("Content-Tyoe", "application/json")
 
-writeJson : Response -> String -> Task x ()
-writeJson = writeAs applicationJson
+writeJson : Response -> Json.Value -> Task x ()
+writeJson res = writeAs applicationJson res << Json.encode 0

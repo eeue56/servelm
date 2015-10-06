@@ -1,8 +1,8 @@
-if [ -e examples/main.js ]
+if [ -e example/main.js ]
 then
-  rm examples/main.js
+  rm example/main.js
 fi
 
-elm make examples/Main.elm --output=examples/main.js
-echo "Elm.worker(Elm.Main);" >> examples/main.js
-node examples/main.js
+elm make example/Main.elm --output=example/main.js
+echo "Elm.worker(Elm.Main);" >> example/main.js
+node example/main.js
