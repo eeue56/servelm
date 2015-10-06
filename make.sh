@@ -1,1 +1,1 @@
-cat src/Native/Wrapper.wisp | wisp > src/Native/Http.js
+cat src/Native/Http.wisp | wisp > src/Native/Http.js
