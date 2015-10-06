@@ -58,12 +58,12 @@
     (let [v localRuntime.Native.Http.values]
       (if v v (set! localRuntime.Native.Http.values {
         :createServer (createServer http Tuple2 Task)
-        :listen       (F3 (listen Task))
+        :listen       (F3 (listen    Task))
         :writeHead    (F3 (writeHead Task))
-        :write        (F2 (write Task))
+        :write        (F2 (write     Task))
         :end          (end Task Tuple0)
-        :url          (fn [res] (:url res))
-        :method       (fn [res] (:method res))
+        :url          (fn [res] (:url        res))
+        :method       (fn [res] (:method     res))
         :statusCode   (fn [res] (:statusCode res))
         :emptyReq     {}
         :emptyRes     {
