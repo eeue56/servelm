@@ -1,21 +1,19 @@
+(defn- createServer
+      [http Tuple2 Task]
+  (fn [address] (let
+    [send (:_0 address)
+     server (.createServer http (fn [request response]
+      (.perform Task (send (Tuple2 request response)))))]
+
+    (.asyncFunction Task
+      (fn [callback] (callback (.succeed Task server)))))))
+
 (defn- sanitize
   [record & spaces]
   (spaces.reduce (fn [r space] (do
     (if (aget r space) nil (set! (aget r space) {}))
     (aget r space)))
   record))
-
-(defn- createServer
-      [http Tuple2 Task]
-  (fn [address] (let
-    [send (:_0 address)
-     server (.createServer http (fn [request response]
-      (do (send (Tuple2 request response))
-          (.log console response)
-          (.log console "->recieved->"))))]
-
-    (.asyncFunction Task
-      (fn [callback] (callback (.succeed Task server)))))))
 
 (defn- listen
   [Task]
@@ -50,7 +48,6 @@
 (defn- make
   [localRuntime] (let
   [http (require "http")
-   Signal          (Elm.Native.Signal.make localRuntime)
    Task            (Elm.Native.Task.make   localRuntime)
    Utils           (Elm.Native.Utils.make  localRuntime)
    Tuple0          (:Tuple0 Utils)
@@ -73,3 +70,5 @@
 
 (sanitize Elm :Native :Http)
 (set! Elm.Native.Http.make make)
+
+(if (== (typeof window) :undefined) (set! window global))
