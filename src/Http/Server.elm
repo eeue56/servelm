@@ -5,9 +5,10 @@ module Http.Server
   , Port, Code, Echo, Header
   , Server
   , emptyReq, Request
-  , emptyRes, Response) where
+  , emptyRes, Response
+  , writeHtml, url) where
 
-import Task exposing (Task, succeed)
+import Task exposing (Task, succeed, andThen)
 import Signal exposing (Address, Mailbox, mailbox)
 import Native.Http
 
@@ -15,9 +16,16 @@ type Server       = Server
 type Request      = Request
 type Response     = Response
 
+type Method
+  = GET
+  | POST
+  | PUT
+  | DELETE
+
 type alias Port   = Int
 type alias Code   = Int
 type alias Echo   = String
+type alias Url    = String
 type alias Header = (String, String)
 
 createServer : Address (Request, Response) -> Task x Server
@@ -40,3 +48,25 @@ emptyReq = Native.Http.emptyReq
 
 emptyRes : Response
 emptyRes = Native.Http.emptyRes
+
+url : Request -> Url
+url = Native.Http.url
+
+method : Request -> Method
+method req = let
+  f : Request -> String
+  f = Native.Http.method
+  in case f req of
+    "GET"    -> GET
+    "POST"   -> POST
+    "PUT"    -> PUT
+    "DELETE" -> DELETE
+
+statusCode : Request -> Code
+statusCode = Native.Http.statusCode
+
+writeHtml : Response -> String -> Task x ()
+writeHtml res html =
+  writeHead 200 ("Content-Type", "text/html") res
+  `andThen` write html
+  `andThen` end

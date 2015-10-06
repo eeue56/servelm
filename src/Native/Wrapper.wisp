@@ -62,6 +62,8 @@
         :writeHead    (F3 (writeHead Task))
         :write        (F2 (write Task))
         :end          (end Task Tuple0)
+        :url          (fn [res] (:url res))
+        :method       (fn [res] (:method res))
         :emptyReq     {}
         :emptyRes     {
           :end          noop
