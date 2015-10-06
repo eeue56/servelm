@@ -27,6 +27,7 @@ port reply : Signal (Task x ())
 port reply = route <~ dropRepeats server.signal
 
 port serve : Task x Server
-port serve =
-  createServer server.address
-  `andThen` listen 8080 "Listening on 8080"
+port serve = createServer'
+  server.address
+  8080
+  "Listening on 8080"

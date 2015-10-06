@@ -1,5 +1,6 @@
 module Http.Server
   ( createServer, listen
+  , createServer'
   , writeHead, write, end
   , writeHtml, writeJson
   , Port, Code, Echo, Header
@@ -56,6 +57,10 @@ createServer = Native.Http.createServer
 
 listen : Port -> Echo -> Server -> Task x Server
 listen = Native.Http.listen
+
+createServer' : Address (Request, Response) -> Port -> Echo -> Task x Server
+createServer' address port' echo =
+  createServer address `andThen` listen port' echo
 
 writeHead : Code -> Header -> Response -> Task x Response
 writeHead = Native.Http.writeHead
