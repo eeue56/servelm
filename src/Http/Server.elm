@@ -6,12 +6,14 @@ module Http.Server
   , Server, Method(..)
   , emptyReq, Request
   , emptyRes, Response
-  , writeHtml, writeJson, url) where
+  , writeHtml, writeJson
+  , url, method, statusCode) where
 
 import Task exposing (Task, succeed, andThen)
 import Signal exposing (Address, Mailbox, mailbox)
 import Json.Encode as Json
 import Native.Http
+import Debug
 
 type Server       = Server
 type Request      = Request
@@ -22,6 +24,7 @@ type Method
   | POST
   | PUT
   | DELETE
+  | NOOP
 
 type alias Port   = Int
 type alias Code   = Int
@@ -53,13 +56,17 @@ emptyRes = Native.Http.emptyRes
 url : Request -> Url
 url = Native.Http.url
 
+method' : Request -> String
+method' = Native.Http.method
+
 method : Request -> Method
 method req =
-  case Native.Http.method req of
+  case method' req of
     "GET"    -> GET
     "POST"   -> POST
     "PUT"    -> PUT
     "DELETE" -> DELETE
+    _        -> NOOP
 
 statusCode : Request -> Code
 statusCode = Native.Http.statusCode

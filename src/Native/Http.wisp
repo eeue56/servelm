@@ -48,11 +48,11 @@
 (defn- make
   [localRuntime] (let
   [http (require "http")
-   Task            (Elm.Native.Task.make   localRuntime)
-   Utils           (Elm.Native.Utils.make  localRuntime)
-   Tuple0          (:Tuple0 Utils)
-   Tuple2          (:Tuple2 Utils)
-   noop            (fn [] nil)]
+   Task   (Elm.Native.Task.make  localRuntime)
+   Utils  (Elm.Native.Utils.make localRuntime)
+   Tuple0 (:Tuple0 Utils)
+   Tuple2 (:Tuple2 Utils)
+   noop   (fn [] nil)]
 
   (do (sanitize localRuntime :Native :Http)
     (let [v localRuntime.Native.Http.values]
