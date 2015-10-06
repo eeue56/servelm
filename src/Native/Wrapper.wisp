@@ -64,6 +64,7 @@
         :end          (end Task Tuple0)
         :url          (fn [res] (:url res))
         :method       (fn [res] (:method res))
+        :statusCode   (fn [res] (:statusCode res))
         :emptyReq     {}
         :emptyRes     {
           :end          noop

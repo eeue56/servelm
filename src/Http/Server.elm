@@ -53,10 +53,8 @@ url : Request -> Url
 url = Native.Http.url
 
 method : Request -> Method
-method req = let
-  f : Request -> String
-  f = Native.Http.method
-  in case f req of
+method req =
+  case Native.Http.method req of
     "GET"    -> GET
     "POST"   -> POST
     "PUT"    -> PUT
