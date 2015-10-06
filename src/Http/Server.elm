@@ -3,7 +3,7 @@ module Http.Server
   , writeHead, write
   , end
   , Port, Code, Echo, Header
-  , Server
+  , Server, Method(..)
   , emptyReq, Request
   , emptyRes, Response
   , writeHtml, url) where
@@ -63,8 +63,19 @@ method req =
 statusCode : Request -> Code
 statusCode = Native.Http.statusCode
 
+writeAs : Header -> Response -> String -> Task x ()
+writeAs header res html =
+  writeHead 200 header res
+  `andThen` write html `andThen` end
+
+textHtml : Header
+textHtml = ("Content-Type", "text/html")
+
 writeHtml : Response -> String -> Task x ()
-writeHtml res html =
-  writeHead 200 ("Content-Type", "text/html") res
-  `andThen` write html
-  `andThen` end
+writeHtml = writeAs textHtml
+
+applicationJson : Header
+applicationJson = ("Content-Tyoe", "application/json")
+
+writeJson : Response -> String -> Task x ()
+writeJson = writeAs applicationJson
