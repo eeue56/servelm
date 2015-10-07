@@ -1,8 +1,8 @@
 {
     "version": "1.0.0",
-    "summary": "helpful summary of your project, less than 80 characters",
-    "repository": "https://github.com/USER/PROJECT.git",
-    "license": "BSD3",
+    "summary": "Simple bindings to Node.js's Http.Server as a Signal (Request, Response)",
+    "repository": "https://github.com/Fresheyeball/elm-http-server.git",
+    "license": "MIT",
     "source-directories": [
         "src"
     ],
