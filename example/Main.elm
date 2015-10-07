@@ -16,7 +16,7 @@ route (req, res) =
       "/foo" -> writeHtml res "<h1>Foozle!</h1>"
       _      -> writeHtml res "<h1>404</h1>"
     POST ->
-      Json.object [("foo", Json.string "bar" )]
+      Json.object [("foo", Json.string "bar")]
       |> writeJson res
     NOOP -> succeed ()
     _ ->
