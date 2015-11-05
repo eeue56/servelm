@@ -7,15 +7,24 @@ var sanitize = function sanitize(record) {
         })();
     }, record);
 };
+
+var wrap_with_type = function(item){
+    return {
+        ctor: item
+    };
+};
+
 var createServer = function createServer(http, Tuple2, Task) {
     return function (address) {
         return function () {
-            var sendø1 = (address || 0)['_0'];
-            var serverø1 = http.createServer(function (request, response) {
-                return Task.perform(sendø1(Tuple2(request, response)));
+            var send = address._0;
+            var server = http.createServer(function (request, response) {
+                request.method = wrap_with_type(request.method);
+
+                return Task.perform(send(Tuple2(request, response)));
             });
             return Task.asyncFunction(function (callback) {
-                return callback(Task.succeed(serverø1));
+                return callback(Task.succeed(server));
             });
         }.call(this);
     };
@@ -25,7 +34,6 @@ var listen = function listen(Task) {
         return Task.asyncFunction(function (callback) {
             return server.listen(port, function () {
                 return (function () {
-                    console.log(echo);
                     return callback(Task.succeed(server));
                 })();
             });
@@ -69,7 +77,10 @@ var end = function end(Task, Tuple0) {
 var on = exports.on = function on(Signal) {
     return function (eventName, x) {
         return x.on(eventName, function (request, response) {
-            return typeof(request) == 'undefined' ? Signal.input(eventName, Tuple0) : Signal.input(eventName, Tuple(request, response));
+            if (typeof(request) == 'undefined') {
+                return Signal.input(eventName, Tuple0);
+            }
+            return Signal.input(eventName, Tuple(request, response));
         });
     };
 };
@@ -94,22 +105,7 @@ var make = function make(localRuntime) {
                     'writeHead': F3(writeHead(Taskø1)),
                     'write': F2(write(Taskø1)),
                     'on': F2(on(Signalø1, Tuple0ø1)),
-                    'end': end(Taskø1, Tuple0ø1),
-                    'url': function (res) {
-                        return (res || 0)['url'];
-                    },
-                    'method': function (res) {
-                        return (res || 0)['method'];
-                    },
-                    'statusCode': function (res) {
-                        return (res || 0)['statusCode'];
-                    },
-                    'emptyReq': {},
-                    'emptyRes': {
-                        'end': noopø1,
-                        'write': noopø1,
-                        'writeHead': noopø1
-                    }
+                    'end': end(Taskø1, Tuple0ø1)
                 };
             }.call(this);
         })();

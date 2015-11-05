@@ -1,12 +1,14 @@
 {
     "version": "1.0.0",
-    "summary": "Simple bindings to Node.js's Http.Server as a Signal (Request, Response)",
-    "repository": "https://github.com/Fresheyeball/elm-http-server.git",
+    "summary": "",
+    "repository": "https://github.com/eeue56/elm-http-server.git",
     "license": "MIT",
     "source-directories": [
         "src"
     ],
-    "exposed-modules": ["Http.Server"],
+    "exposed-modules": [
+        "Http"
+    ],
     "native-modules": true,
     "dependencies": {
         "elm-lang/core": "2.1.0 <= v < 3.0.0"
