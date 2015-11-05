@@ -1,2 +1,3 @@
 example/*.js
 elm-stuff/
+.DS_Store
