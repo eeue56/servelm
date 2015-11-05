@@ -1,12 +1,11 @@
 # Elm Http Server
 
-Simple bindings to Node.js's Http.Server as a `Signal (Request, Response)`. IO is handled through `Task`s.
+Originally inspired by https://github.com/Fresheyeball/elm-http-server.
 
-Ideally this serves as a starting point for low level bindings, and will expand to have exhaustive bindings to Http.Server, and be the basis for other libraries such as routing.
 
 ## Get started
 
-To get your server running, you must execute your `Task`s with `port`s. As well as start Elm inside the Node process. To start Elm inside of Node simply this to the end of your compiled Elm code.
+To start Elm inside of Node simply this to the end of your compiled Elm code.
 
 ```JavaScript
 Elm.worker(Elm.main);
@@ -32,3 +31,5 @@ Test a `POST` request
 ```
 curl --data "" localhost:8080/json
 ```
+
+
