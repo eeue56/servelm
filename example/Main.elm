@@ -2,7 +2,9 @@ module Main where
 
 import Http.Server exposing (..)
 import Http.Request exposing (emptyReq, Request, Method(..))
-import Http.Response exposing (emptyRes, Response, writeHtml, writeJson, writeElm)
+import Http.Response exposing (emptyRes, Response,
+  writeHtml, writeJson,
+  writeElm, writeFile)
 
 import Task exposing (..)
 import Signal exposing (..)
@@ -15,16 +17,16 @@ route : (Request, Response) -> Task x ()
 route (req, res) =
   case req.method of
     GET -> case req.url of
-      "/"    -> writeElm "/App" res
-      "/foo" -> writeHtml res "<h1>Foozle!</h1>"
-      _      -> writeHtml res "<h1>404</h1>"
+      "/" -> writeElm "/App" res
+      "/foo" -> writeHtml "<h1>Foozle!</h1>" res
+      url -> writeFile url res
     POST ->
-      Json.object [("foo", Json.string "bar")]
-      |> writeJson res
+      res |>
+        writeJson (Json.object [("foo", Json.string "bar")])
     NOOP -> succeed ()
     _ ->
-      Json.string "fail"
-      |> writeJson res
+      res |>
+        writeJson (Json.string "fail")
 
 port reply : Signal (Task x ())
 port reply = route <~ dropRepeats server.signal

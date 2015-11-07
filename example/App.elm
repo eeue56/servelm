@@ -2,4 +2,4 @@ module App where
 
 import Graphics.Element exposing (show)
 
-main = show <| "This server was written in Elm!"
+main = show <| "This server was written in Elm! Try /App.elm"

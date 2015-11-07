@@ -51,8 +51,8 @@ write = Native.Http.write
 end : Response -> Task x ()
 end = Native.Http.end
 
-writeAs : Header -> Response -> String -> Task x ()
-writeAs header res html =
+writeAs : Header -> String -> Response -> Task x ()
+writeAs header html res =
   writeHead 200 header res
   `andThen` write html `andThen` end
 
@@ -61,7 +61,7 @@ writeAs header res html =
     res `writeHtml` "<h1>Howdy</h1>"
 
  -}
-writeHtml : Response -> String -> Task x ()
+writeHtml : String -> Response -> Task x ()
 writeHtml = writeAs textHtml
 
 {-| Write out JSON to a Response. For example
@@ -69,8 +69,9 @@ writeHtml = writeAs textHtml
       [ ("foo", Json.string "bar")
       , ("baz", Json.int 0) ]
 -}
-writeJson : Response -> Json.Value -> Task x ()
-writeJson res = writeAs applicationJson res << Json.encode 0
+writeJson : Json.Value -> Response -> Task x ()
+writeJson val res =
+  writeAs applicationJson (Json.encode 0 val) res
 
 {-| write a file -}
 writeFile : String -> Response -> Task a ()
