@@ -2,7 +2,7 @@ module Main where
 
 import Http.Server exposing (..)
 import Http.Request exposing (emptyReq, Request, Method(..))
-import Http.Response exposing (emptyRes, Response, writeHtml, writeJson)
+import Http.Response exposing (emptyRes, Response, writeHtml, writeJson, writeElm)
 
 import Task exposing (..)
 import Signal exposing (..)
@@ -15,7 +15,7 @@ route : (Request, Response) -> Task x ()
 route (req, res) =
   case req.method of
     GET -> case req.url of
-      "/"    -> writeHtml res "<h1>Wowzers</h1>"
+      "/"    -> writeElm "/App" res
       "/foo" -> writeHtml res "<h1>Foozle!</h1>"
       _      -> writeHtml res "<h1>404</h1>"
     POST ->

@@ -46,6 +46,45 @@ var write = function write(Task) {
         });
     };
 };
+
+var writeFile = function writeFile(fs, mime, Task){
+    return function (fileName, res) {
+        return Task.asyncFunction(function (callback) {
+            var file = __dirname + fileName;
+            var type = mime.lookup(file);
+
+            res.writeHead('Content-Type', type);
+
+            fs.readFile(file, function (e, data) {
+                res.end(data);
+                return callback(Task.succeed(res));
+            });
+
+        });
+    };
+};
+
+var writeElm = function writeElm(fs, mime, compiler, Task){
+    return function (fileName, res) {
+        return Task.asyncFunction(function (callback) {
+            var file = __dirname + fileName;
+
+            compiler.compile([file + '.elm'], {
+                output: file + '.html'
+            }).on('close', function(exitCode) {
+                var type = mime.lookup(file + '.html');
+
+                res.writeHead('Content-Type', type);
+
+                fs.readFile(file + '.html', function (e, data) {
+                    res.end(data);
+                    return callback(Task.succeed(res));
+                });
+            });
+        });
+    };
+};
+
 var end = function end(Task, Tuple0) {
     return function (res) {
         return Task.asyncFunction(function (callback) {
@@ -76,6 +115,10 @@ var make = function make(localRuntime) {
     }
 
     var http = require('http');
+    var fs = require('fs');
+    var mime = require('mime');
+    var compiler = require('node-elm-compiler');
+
     var Task = Elm.Native.Task.make(localRuntime);
     var Utils = Elm.Native.Utils.make(localRuntime);
     var Signal = Elm.Native.Signal.make(localRuntime);
@@ -87,6 +130,8 @@ var make = function make(localRuntime) {
         'createServer': createServer(http, Tuple2, Task),
         'listen': F3(listen(Task)),
         'writeHead': F3(writeHead(Task)),
+        'writeFile': F2(writeFile(fs, mime, Task)),
+        'writeElm': F2(writeElm(fs, mime, compiler, Task)),
         'write': F2(write(Task)),
         'on': F2(on(Signal, Tuple0)),
         'end': end(Task, Tuple0)

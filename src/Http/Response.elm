@@ -3,6 +3,7 @@ module Http.Response
   , emptyRes
   , write, writeHead
   , writeHtml, writeJson
+  , writeFile, writeElm
   , textHtml, applicationJson
   , onCloseRes, onFinishRes
   , end
@@ -71,6 +72,19 @@ writeHtml = writeAs textHtml
 writeJson : Response -> Json.Value -> Task x ()
 writeJson res = writeAs applicationJson res << Json.encode 0
 
+{-| write a file -}
+writeFile : String -> Response -> Task a ()
+writeFile file res =
+  writeHead 200 textHtml res
+    `andThen` Native.Http.writeFile file
+    `andThen` end
+
+{-| write elm! -}
+writeElm : String -> Response -> Task a ()
+writeElm file res =
+  writeHead 200 textHtml res
+    `andThen` Native.Http.writeElm file
+    `andThen` end
 
 {-| Html Header {"Content-Type":"text/html"}-}
 textHtml : Header
