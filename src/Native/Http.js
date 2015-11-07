@@ -68,6 +68,9 @@ var writeElm = function writeElm(fs, mime, compiler, Task){
     return function (fileName, res) {
         return Task.asyncFunction(function (callback) {
             var file = __dirname + fileName;
+            process.chdir(__dirname);
+
+
 
             compiler.compile([file + '.elm'], {
                 output: file + '.html'
