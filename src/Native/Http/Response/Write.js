@@ -37,28 +37,37 @@ var writeFile = function writeFile(fs, mime, Task){
     };
 };
 
-var writeElm = function writeElm(fs, mime, crypto, compiler, Task){
-    return function (fileName, res) {
-        var compiled_file = COMPILED_DIR + fileName + '.html';
+var compile
 
-        if (fs.existsSync(compiled_file)) {
-            return writeFile(fs, mime, Task)("/" + compiled_file, res);
+var writeElm = function writeElm(fs, mime, crypto, compiler, Task){
+
+    var compile = function(file, outfile, onClose){
+        // switch to the directory that the elm-app is served out of
+
+        var dirIndex = file.lastIndexOf('/');
+        var dir = file.substr(0, dirIndex);
+        process.chdir(dir);
+
+        compiler.compile([file + '.elm'], {
+            output: outfile,
+            yes: true
+        }).on('close', onClose);
+    }
+
+    return function (fileName, res) {
+        var compiledFile = COMPILED_DIR + fileName + '.html';
+
+        // if the file is already compiled, just send it out
+        if (fs.existsSync(compiledFile)) {
+            return writeFile(fs, mime, Task)("/" + compiledFile, res);
         }
 
         return Task.asyncFunction(function (callback) {
             var file = __dirname + fileName;
-            var outfile = __dirname + "/" + compiled_file;
+            var outfile = __dirname + "/" + compiledFile;
 
-            // switch to the directory that the elm-app is served out of
-            var dirIndex = file.lastIndexOf('/');
-            var dir = file.substr(0, dirIndex);
-
-            process.chdir(dir);
-
-            compiler.compile([file + '.elm'], {
-                output: outfile,
-                yes: true
-            }).on('close', function(exitCode) {
+            // when the file is compiled, attempt to send it out
+            var onClose = function(exitCode) {
                 var type = mime.lookup(file + '.html');
                 res.writeHead('Content-Type', type);
 
@@ -66,7 +75,9 @@ var writeElm = function writeElm(fs, mime, crypto, compiler, Task){
                     res.end(data);
                     return callback(Task.succeed(res));
                 });
-            });
+            };
+
+            compile(file, outFile, onClose);
         });
     };
 };

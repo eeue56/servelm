@@ -1,11 +1,14 @@
 var COMPILED_DIR = '.comp';
 
+// take a name as a string, return an elm object of the type
+// the name given
 var wrap_with_type = function(item){
     return {
         ctor: item
     };
 };
 
+// make the directory for compiled Elm code
 var make_compile_dir = function(fs, dir){
     if (typeof dir === "undefined"){
         dir = COMPILED_DIR;
@@ -63,24 +66,17 @@ var make = function make(localRuntime) {
 
     var http = require('http');
     var fs = require('fs');
-    var crypto = require('crypto');
-
     var mime = require('mime');
-    var compiler = require('node-elm-compiler');
-    var toHtml = require('vdom-to-html');
 
     var Task = Elm.Native.Task.make(localRuntime);
     var Utils = Elm.Native.Utils.make(localRuntime);
     var Signal = Elm.Native.Signal.make(localRuntime);
-    var Tuple0 = Utils['Tuple0'];
     var Tuple2 = Utils['Tuple2'];
-
 
     return {
         'createServer': createServer(fs, http, Tuple2, Task),
         'listen': F3(listen(Task)),
-        'on': F2(on(Signal, Tuple0)),
-        'toHtml': toHtml
+        'on': F2(on(Signal, Tuple0))
     };
 };
 Elm.Native.Http = {};
