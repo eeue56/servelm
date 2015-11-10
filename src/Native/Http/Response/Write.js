@@ -41,7 +41,7 @@ var compile
 
 var writeElm = function writeElm(fs, mime, crypto, compiler, Task){
 
-    var compile = function(file, outfile, onClose){
+    var compile = function(file, outFile, onClose){
         // switch to the directory that the elm-app is served out of
 
         var dirIndex = file.lastIndexOf('/');
@@ -49,7 +49,7 @@ var writeElm = function writeElm(fs, mime, crypto, compiler, Task){
         process.chdir(dir);
 
         compiler.compile([file + '.elm'], {
-            output: outfile,
+            output: outFile,
             yes: true
         }).on('close', onClose);
     }
@@ -64,14 +64,14 @@ var writeElm = function writeElm(fs, mime, crypto, compiler, Task){
 
         return Task.asyncFunction(function (callback) {
             var file = __dirname + fileName;
-            var outfile = __dirname + "/" + compiledFile;
+            var outFile = __dirname + "/" + compiledFile;
 
             // when the file is compiled, attempt to send it out
             var onClose = function(exitCode) {
                 var type = mime.lookup(file + '.html');
                 res.writeHead('Content-Type', type);
 
-                fs.readFile(outfile, function (e, data) {
+                fs.readFile(outFile, function (e, data) {
                     res.end(data);
                     return callback(Task.succeed(res));
                 });

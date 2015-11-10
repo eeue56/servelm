@@ -71,6 +71,7 @@ var make = function make(localRuntime) {
     var Task = Elm.Native.Task.make(localRuntime);
     var Utils = Elm.Native.Utils.make(localRuntime);
     var Signal = Elm.Native.Signal.make(localRuntime);
+    var Tuple0 = Utils['Tuple0'];
     var Tuple2 = Utils['Tuple2'];
 
     return {
