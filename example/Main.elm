@@ -9,6 +9,7 @@ import Http.Response exposing (emptyRes, Response,
 import Task exposing (..)
 import Signal exposing (..)
 import Json.Encode as Json
+import App
 
 server : Mailbox (Request, Response)
 server = mailbox (emptyReq, emptyRes)

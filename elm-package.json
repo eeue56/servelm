@@ -4,7 +4,8 @@
     "repository": "https://github.com/eeue56/elm-http-server.git",
     "license": "MIT",
     "source-directories": [
-        "src"
+        "src",
+        "example"
     ],
     "exposed-modules": [
         "Http"
