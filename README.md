@@ -10,7 +10,7 @@ The Http.Server module allows you to create servers and run them.
 
 ## Sending out Elm
 
-Use the `Http.Response.writeElm` function to compile an Elm file on request. It will compile an Elm file found with `name + ".elm"". It will write the output to a file in the same folder as `name + ".html"`. This will then be served out to the client. There is no caching involved, meaning that every request that involves a call to `writeElm` will trigger a compile. Use this function as a proof of concept.
+Use the `Http.Response.writeElm` function to compile an Elm file on request. It will compile an Elm file found with `name + ".elm""`. It will write the output to a file in the same folder as `name + ".html"`. This will then be served out to the client. There is no caching involved, meaning that every request that involves a call to `writeElm` will trigger a compile. Use this function as a proof of concept.
 
 This is enabled by the [node-elm-compiler](https://github.com/rtfeldman/node-elm-compiler) package.
 
