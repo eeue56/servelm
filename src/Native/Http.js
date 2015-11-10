@@ -68,7 +68,12 @@ var writeElm = function writeElm(fs, mime, compiler, Task){
     return function (fileName, res) {
         return Task.asyncFunction(function (callback) {
             var file = __dirname + fileName;
-            process.chdir(__dirname);
+
+            var dirIndex = file.lastIndexOf('/');
+
+            var dir = file.substr(0, dirIndex);
+
+            process.chdir(dir);
 
 
 

@@ -9,7 +9,6 @@ import Http.Response exposing (emptyRes, Response,
 import Task exposing (..)
 import Signal exposing (..)
 import Json.Encode as Json
-import App
 
 server : Mailbox (Request, Response)
 server = mailbox (emptyReq, emptyRes)
@@ -18,16 +17,25 @@ route : (Request, Response) -> Task x ()
 route (req, res) =
   case req.method of
     GET -> case req.url of
-      "/" -> writeElm "/App" res
-      "/foo" -> writeHtml "<h1>Foozle!</h1>" res
-      url -> writeFile url res
+      "/" ->
+        writeElm "/client/App" res
+      "/App.elm" ->
+        writeFile "/client/App.elm" res
+      "/foo" ->
+        writeHtml "<h1>Foozle!</h1>" res
+      url ->
+        writeHtml ("You tried to go to " ++ url) res
+
     POST ->
       res |>
         writeJson (Json.object [("foo", Json.string "bar")])
-    NOOP -> succeed ()
+
+    NOOP ->
+      succeed ()
+
     _ ->
       res |>
-        writeJson (Json.string "fail")
+        writeJson (Json.string "unknown method!")
 
 port reply : Signal (Task x ())
 port reply = route <~ dropRepeats server.signal
