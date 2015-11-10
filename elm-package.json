@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
     "summary": "",
-    "repository": "https://github.com/eeue56/elm-http-server.git",
+    "repository": "https://github.com/eeue56/servelm.git",
     "license": "MIT",
     "source-directories": [
         "src",

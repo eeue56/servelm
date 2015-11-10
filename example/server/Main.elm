@@ -2,9 +2,10 @@ module Main where
 
 import Http.Server exposing (..)
 import Http.Request exposing (emptyReq, Request, Method(..))
-import Http.Response exposing (emptyRes, Response,
-  writeHtml, writeJson,
-  writeElm, writeFile)
+import Http.Response exposing (emptyRes, Response)
+import Http.Response.Write exposing
+  ( writeHtml, writeJson
+  , writeElm, writeFile)
 
 import Task exposing (..)
 import Signal exposing (..)
