@@ -5,7 +5,8 @@
     "license": "BSD3",
     "source-directories": [
         ".",
-        "Html/"
+        "server/",
+        "server/Client"
     ],
     "exposed-modules": [],
     "dependencies": {

@@ -12,10 +12,8 @@ import Task exposing (..)
 import Signal exposing (..)
 import Json.Encode as Json
 
-import Html exposing (div, text)
+import ServerSideClient.App exposing (main)
 
-someText =
-  div [] [ text "hello bob!" ]
 
 server : Mailbox (Request, Response)
 server = mailbox (emptyReq, emptyRes)
@@ -31,7 +29,7 @@ route (req, res) =
       "/foo" ->
         writeHtml "<h1>Foozle!</h1>" res
       "/bar" ->
-        writeNode someText res
+        writeNode main res
       url ->
         writeHtml ("You tried to go to " ++ url) res
 

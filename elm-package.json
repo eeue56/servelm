@@ -4,8 +4,9 @@
     "repository": "https://github.com/eeue56/servelm.git",
     "license": "MIT",
     "source-directories": [
-        "src",
-        "example"
+        "src/",
+        "example/",
+        "example/server/"
     ],
     "exposed-modules": [
         "Http"

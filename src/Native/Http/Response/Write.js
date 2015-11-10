@@ -73,8 +73,6 @@ var writeElm = function writeElm(fs, mime, crypto, compiler, Task){
 
 var writeNode = function writeNode(toHtml, Task){
     return function(node, res) {
-        console.log(toHtml(node));
-
         return write(Task)(toHtml(node), res);
     };
 };
