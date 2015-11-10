@@ -5,11 +5,17 @@ import Http.Request exposing (emptyReq, Request, Method(..))
 import Http.Response exposing (emptyRes, Response)
 import Http.Response.Write exposing
   ( writeHtml, writeJson
-  , writeElm, writeFile)
+  , writeElm, writeFile
+  , writeNode)
 
 import Task exposing (..)
 import Signal exposing (..)
 import Json.Encode as Json
+
+import Html exposing (div, text)
+
+someText =
+  div [] [ text "hello bob!" ]
 
 server : Mailbox (Request, Response)
 server = mailbox (emptyReq, emptyRes)
@@ -24,6 +30,8 @@ route (req, res) =
         writeFile "/client/App.elm" res
       "/foo" ->
         writeHtml "<h1>Foozle!</h1>" res
+      "/bar" ->
+        writeNode someText res
       url ->
         writeHtml ("You tried to go to " ++ url) res
 

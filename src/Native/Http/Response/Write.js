@@ -71,6 +71,14 @@ var writeElm = function writeElm(fs, mime, crypto, compiler, Task){
     };
 };
 
+var writeNode = function writeNode(toHtml, Task){
+    return function(node, res) {
+        console.log(toHtml(node));
+
+        return write(Task)(toHtml(node), res);
+    };
+};
+
 var end = function end(Task, Tuple0) {
     return function (res) {
         return Task.asyncFunction(function (callback) {
@@ -108,6 +116,7 @@ var make = function make(localRuntime) {
         'writeHead': F3(writeHead(Task)),
         'writeFile': F2(writeFile(fs, mime, Task)),
         'writeElm': F2(writeElm(fs, mime, crypto, compiler, Task)),
+        'writeNode': F2(writeNode(toHtml, Task)),
         'write': F2(write(Task)),
         'toHtml': toHtml,
         'end': end(Task, Tuple0)

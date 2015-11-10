@@ -2,11 +2,13 @@ module Http.Response.Write
   ( write, writeHead
   , writeHtml, writeJson
   , writeFile, writeElm
+  , writeNode
   , end) where
 
 
 import Native.Http.Response.Write
 import Task exposing (Task, andThen)
+import VirtualDom exposing (Node)
 import Json.Encode as Json
 import Http.Response exposing (textHtml, applicationJson, Header, Response, StatusCode)
 
@@ -59,4 +61,10 @@ writeElm : String -> Response -> Task a ()
 writeElm file res =
   writeHead 200 textHtml res
     `andThen` Native.Http.Response.Write.writeElm file
+    `andThen` end
+
+writeNode : Node -> Response -> Task a ()
+writeNode node res =
+  writeHead 200 textHtml res
+    `andThen` Native.Http.Response.Write.writeNode node
     `andThen` end
