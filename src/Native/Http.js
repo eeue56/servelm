@@ -69,16 +69,15 @@ var writeElm = function writeElm(fs, mime, compiler, Task){
         return Task.asyncFunction(function (callback) {
             var file = __dirname + fileName;
 
+            // switch to the directory that the elm-app is served out of
             var dirIndex = file.lastIndexOf('/');
-
             var dir = file.substr(0, dirIndex);
 
             process.chdir(dir);
 
-
-
             compiler.compile([file + '.elm'], {
-                output: file + '.html'
+                output: file + '.html',
+                yes: true
             }).on('close', function(exitCode) {
                 var type = mime.lookup(file + '.html');
 
