@@ -39,7 +39,7 @@ applicationJson = ("Content-Type", "application/json")
 onCloseRes : Response -> Signal ()
 onCloseRes = on "close"
 
-{-| "Finsh" events as a Signal for Reponse objects.
+{-| "Finsh" events as a Signal for Response objects.
 [Node docs](https://nodejs.org/api/http.html#http_event_finish) -}
 onFinishRes : Response -> Signal ()
 onFinishRes = on "finish"
