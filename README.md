@@ -1,5 +1,10 @@
 # Servelm - Elm Http Server
 
+# Depreciated. Server side elm is not designed to work this way.
+
+
+
+
 This server, along with rtfeldman's Elm stylesheets, means that we can now have full stack Elm support. At no point in the development of an application will you have to write anything other than Elm!
 
 It now supports server-side rendering of elm-html.
