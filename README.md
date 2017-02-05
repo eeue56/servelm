@@ -1,6 +1,6 @@
 # Servelm - Elm Http Server
 
-# Depreciated. Server side elm is not designed to work this way.
+# Deprecated. Server side elm is not designed to work this way.
 
 
 
